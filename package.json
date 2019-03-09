@@ -12,7 +12,7 @@
   "author": "BlueEast Team <code@blueeast.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/BlueBaseJS/plugin-debugger-reactotron"
   },
   "release": {
     "branch": "master",
