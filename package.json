@@ -1,0 +1,178 @@
+{
+  "name": "@bluebase/plugin-debugger-reactotron",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "main": "dist/src/bluerain-debugger-reactotron.js",
+  "module": "dist/src/bluerain-debugger-reactotron.js",
+  "typings": "dist/types/src/bluerain-debugger-reactotron.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "BlueEast Team <code@blueeast.com>",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "release": {
+    "branch": "master",
+    "dryRun": false,
+    "debug": true
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "boot": "",
+    "build": "tsc && typedoc --out dist/docs --target es6 --theme minimal --mode file src && bundlesize",
+    "start": "tsc -w",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
+    "deploy-docs": "ts-node tools/gh-pages-publish",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls && codecov",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release",
+    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
+    "precommit": "lint-staged",
+    "storybook": "start-storybook -p 6006",
+    "storybook-native": "storybook start -p 7007",
+    "prestorybook-native": "rnstl",
+    "build-storybook": "build-storybook",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "storybook:start": "bluebase storybook:start",
+    "web:start": "bluebase web:start"
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/src/*.js",
+      "maxSize": "3 kB"
+    }
+  ],
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --write --use-tabs --single-quote",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types",
+      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    },
+    "react-native-storybook-loader": {
+      "searchDir": [
+        "./src"
+      ],
+      "pattern": "**/*.stories.tsx",
+      "outputFile": "./storybook/storyLoader.tsx"
+    }
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "collectCoverage": true,
+    "mapCoverage": true
+  },
+  "devDependencies": {
+    "@bluebase/cli-essentials": "^0.0.2",
+    "@bluebase/core": "^4.0.0-aplha.10",
+    "@babel/core": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "@bluebase/storybook-addon": "^3.0.0",
+    "@blueeast/bluerain-platform-reactxp": "^3.0.3",
+    "@blueeast/tslint-config-blueeast": "^0.7.0",
+    "@storybook/addon-actions": "^3.3.12",
+    "@storybook/addon-graphql": "^3.2.0",
+    "@storybook/addon-info": "^3.2.9",
+    "@storybook/addon-knobs": "^3.3.13",
+    "@storybook/addon-links": "^3.3.12",
+    "@storybook/addon-storyshots": "^3.2.13",
+    "@storybook/addons": "^3.2.13",
+    "@storybook/react": "^3.3.12",
+    "@storybook/react-native": "^3.3.12",
+    "@types/compression": "^0.0.36",
+    "@types/deepmerge": "^2.2.0",
+    "@types/jest": "^21.1.0",
+    "@types/node": "^8.0.0",
+    "@types/react": "^16.8.7",
+    "@types/react-native": "^0.51.9",
+    "@types/source-map-support": "^0.5.0",
+    "@types/storybook__react": "^3.0.6",
+    "@types/uuid": "^3.4.4",
+    "awesome-typescript-loader": "^3.4.1",
+    "babel-loader": "^8.0.4",
+    "babel-preset-bluebase": "^2.3.0",
+    "bundlesize": "^0.15.2",
+    "codecov": "^2.3.1",
+    "colors": "^1.1.2",
+    "commitizen": "^2.9.6",
+    "coveralls": "^3.0.0",
+    "cross-env": "^5.0.1",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.14.0",
+    "jest": "^22.4.2",
+    "lint-staged": "^6.0.0",
+    "lodash.camelcase": "^4.3.0",
+    "prettier": "^1.4.4",
+    "prompt": "^1.0.0",
+    "prop-types": "^15.6.0",
+    "react-native-scripts": "1.8.1",
+    "react-native-storybook-loader": "^1.7.0",
+    "react-native-typescript-transformer": "^1.2.3",
+    "replace-in-file": "^3.0.0-beta.2",
+    "rimraf": "^2.6.1",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "semantic-release": "^15.13.3",
+    "storybook-addon-intl": "^2.1.2",
+    "storybook-addon-rtl": "^0.1.1",
+    "metro-react-native-babel-preset": "^0.53.0",
+    "ts-jest": "^22.4.1",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
+    "typedoc": "^0.11.1",
+    "source-map-support": "^0.5.10",
+    "uuid": "^3.3.2",
+    "typescript": "^3",
+    "validate-commit-msg": "^2.12.2"
+  },
+  "dependencies": {
+    "compression": "^1.7.3",
+    "deepmerge": "^3.2.0",
+    "expo": "29.0.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "reactotron-apisauce": "^1.13.0",
+    "reactotron-react-js": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@bluebase/core": "*",
+    "react": "16.x.x",
+    "react-dom": "16.x.x"
+  }
+}
