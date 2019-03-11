@@ -1,2 +1,2 @@
-# plugin-debugger-reactotron
+# plugin-reactotron
 Reactotron (web) comes to BlueBase!
