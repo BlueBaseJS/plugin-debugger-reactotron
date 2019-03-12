@@ -1,1 +1,1 @@
-export default function (input: any, paths: any): any;
+export default function (input: any, _paths: any): any;

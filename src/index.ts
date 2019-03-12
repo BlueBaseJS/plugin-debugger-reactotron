@@ -4,57 +4,68 @@ const { trackGlobalErrors } = require('reactotron-react-js');
 
 import { BlueBase, BootOptions, createPlugin } from '@bluebase/core';
 
-
 export const ReactotronDebugger = createPlugin({
 	categories: ['debugger'],
 	key: 'reactotron',
 	name: 'reactotron',
-
 
 	defaultConfigs: {
 		'plugins.reactotron.apisauce': false,
 		'plugins.reactotron.useTrackGlobalErrors': false,
 		'plugins.reactotron.connect': false,
 		'plugins.reactotron.configure': false
-
 	},
 
 	filters: {
-
-		'bluebase.boot.end': (_bootOptions: BootOptions, _ctx: any, BB: BlueBase) => {
-			Reactotron
-				.configure(BB.Configs.getValue('plugins.reactotron.configure'))
+		'bluebase.boot.end': (
+			_bootOptions: BootOptions,
+			_ctx: any,
+			BB: BlueBase
+		) => {
+			Reactotron.configure(BB.Configs.getValue('plugins.reactotron.configure'))
 				.use(apisaucePlugin(BB.Configs.getValue('plugins.reactotron.apisauce')))
-				.use(trackGlobalErrors(BB.Configs.getValue('plugins.reactotron.apisauce')))
+				.use(
+					trackGlobalErrors(
+						BB.Configs.getValue('plugins.reactotron.trackGlobalErrors')
+					)
+				)
 				.connect(BB.Configs.getValue('plugins.reactotron.connect'));
-			BB.Logger.log('test====>');
-
 		},
-		'bluebase.plugins.initialize': (_bootOptions: BootOptions, _ctx: any, BB: BlueBase) => {
-
-			Reactotron
-				.configure(BB.Configs.getValue('plugins.reactotron.configure'))
+		'bluebase.plugins.initialize': (
+			_bootOptions: BootOptions,
+			_ctx: any,
+			BB: BlueBase
+		) => {
+			Reactotron.configure(BB.Configs.getValue('plugins.reactotron.configure'))
 				.use(apisaucePlugin(BB.Configs.getValue('plugins.reactotron.apisauce')))
-				.connect(BB.Configs.getValue('plugins.reactotron.connect'));
-
-
-			// send data to logging provider here
+				.connect(BB.Configs.getValue('plugins.reactotron.connect'))
+				.clear();
 		},
-		'bluebase.logger.debug': (message: string, { params }: { params: any }, BB: BlueBase) => {
-
+		'bluebase.logger.log': (
+			message: string,
+			{ params }: { params: any },
+			BB: BlueBase
+		) => {
 			Reactotron.log(message, params);
-
-			Reactotron.warn(message, params);
-
-			Reactotron.error(message, params);
-
-			Reactotron.display({
-				BB,
-				message,
-				params,
-			});
-
 		}
-	},
+		// 'bluebase.logger.warn': (message: string, { params }: { params: any }, BB: BlueBase) => {
 
+		// 	Reactotron.warn(message, params);
+		// 	return message;
+		// },
+		// 'bluebase.logger.error': (message: string, { params }: { params: any }, BB: BlueBase) => {
+
+		// 	Reactotron.error(message, params);
+		// },
+
+		// 	Reactotron.error(message, params);
+
+		// 	Reactotron.display({
+		// 		BB,
+		// 		message,
+		// 		params,
+		// 	});
+
+		// }
+	}
 });

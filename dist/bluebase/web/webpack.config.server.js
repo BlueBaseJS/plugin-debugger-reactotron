@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function default_1(input, paths) {
+function default_1(input, _paths) {
     return input;
 }
 exports.default = default_1;

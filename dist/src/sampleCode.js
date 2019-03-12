@@ -8,7 +8,7 @@ exports.ReactotronDebugger = core_1.createPlugin({
     categories: ['debugger'],
     defaultConfigs: {
         'plugins.reactotron.useTrackGlobalErrors': false,
-        'plugins.reactotron.apisauce': false,
+        'plugins.reactotron.apisauce': false
     },
     filters: {
         'bluebase.boot.end': (_bootOptions, _ctx, BB) => {
@@ -20,9 +20,8 @@ exports.ReactotronDebugger = core_1.createPlugin({
             Reactotron.log('hello rendering world');
             BB.Logger.log('test====>');
         },
-        'bluebase.plugins.initialize': (_bootOptions, _ctx, BB) => {
-            Reactotron
-                .configure()
+        'bluebase.plugins.initialize': (_bootOptions, _ctx, _BB) => {
+            Reactotron.configure()
                 // .use(BB.Configs.getValue('plugins.reactotron.useTrackGlobalErrors'))
                 // .apisauce(BB.Configs.getValue('plugins.reactotron.apisauce'))
                 .connect();
@@ -36,6 +35,6 @@ exports.ReactotronDebugger = core_1.createPlugin({
                 BB
             });
         }
-    },
+    }
 });
 //# sourceMappingURL=sampleCode.js.map

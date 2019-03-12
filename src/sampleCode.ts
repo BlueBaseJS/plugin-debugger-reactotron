@@ -1,4 +1,3 @@
-c;
 const Reactotron = require('reactotron-react-js').default;
 import { createPlugin, BlueBase, BootOptions } from '@bluebase/core';
 
@@ -31,7 +30,7 @@ export const ReactotronDebugger = createPlugin({
 		'bluebase.plugins.initialize': (
 			_bootOptions: BootOptions,
 			_ctx: any,
-			BB: BlueBase
+			_BB: BlueBase
 		) => {
 			Reactotron.configure()
 				// .use(BB.Configs.getValue('plugins.reactotron.useTrackGlobalErrors'))

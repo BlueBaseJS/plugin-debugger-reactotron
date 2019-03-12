@@ -1,3 +1,3 @@
-export default function (input: any, paths: any) {
+export default function (input: any, _paths: any) {
 	return input;
 }
