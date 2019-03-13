@@ -1,178 +1,143 @@
 {
   "name": "@bluebase/plugin-reactotron",
-  "version": "0.0.1",
-  "description": "",
-  "keywords": [],
-  "main": "dist/src/bluerain-debugger-reactotron.js",
-  "module": "dist/src/bluerain-debugger-reactotron.js",
-  "typings": "dist/types/src/bluerain-debugger-reactotron.d.ts",
-  "files": [
-    "dist"
-  ],
+  "description": "Reactotron (web) comes to BlueBase!",
   "author": "BlueEast Team <code@blueeast.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/BlueBaseJS/plugin-reactotron"
-  },
-  "release": {
-    "branch": "master",
-    "dryRun": false,
-    "debug": true
-  },
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "repository": "https://github.com/BlueBaseJS/plugin-reactotron",
   "license": "MIT",
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "scripts": {
-    "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
-    "boot": "",
-    "build": "tsc && typedoc --out dist/docs --target es6 --theme minimal --mode file src && bundlesize",
-    "start": "tsc -w",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
-    "deploy-docs": "ts-node tools/gh-pages-publish",
-    "report-coverage": "cat ./coverage/lcov.info | coveralls && codecov",
-    "commit": "git-cz",
-    "semantic-release": "semantic-release",
-    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "precommit": "lint-staged",
-    "storybook": "start-storybook -p 6006",
-    "storybook-native": "storybook start -p 7007",
-    "prestorybook-native": "rnstl",
-    "build-storybook": "build-storybook",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "storybook:start": "bluebase storybook:start",
-    "web:start": "bluebase web:start"
-  },
-  "bundlesize": [
+  "keywords": [],
+  "config": {},
+  "size-limit": [
     {
-      "path": "./dist/src/*.js",
-      "maxSize": "3 kB"
+      "limit": "3 KB",
+      "webpack": false,
+      "path": "dist/**/*.js"
     }
   ],
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --write --use-tabs --single-quote",
-      "git add"
-    ]
+  "scripts": {
+    "start": "yarn run storybook",
+    "clean": "rimraf coverage dist tmp",
+    "watch": "tsc -w -p tsconfig.json",
+    "watch:test": "jest --watch",
+    "lint": "tslint -t stylish --project \"tsconfig.json\"",
+    "info": "npm-scripts-info",
+    "build": "run-s clean && run-p build:* && cp -r ./dist/src/* ./dist && rm -r ./dist/src && yarn run size",
+    "build:main": "tsc -p tsconfig.json && babel ./src --out-dir dist --ignore \"**/__tests__\",\"**/__stories__\" --extensions \".ts,.tsx,.js,.jsx\"",
+    "fix": "run-s fix:*",
+    "fix:prettier": "prettier \"src/**/*.ts\" --write",
+    "fix:tslint": "tslint --fix --project .",
+    "test": "run-s build test:*",
+    "test:only": "jest --coverage",
+    "test:lint": "npm run lint",
+    "test:prettier": "prettier \"src/**/*.ts\" --list-different",
+    "commit": "git-cz",
+    "report-coverage": "codecov && cat ./coverage/lcov.info | codacy-coverage",
+    "doc": "run-s doc:html && run-s doc:build-storybook && opn docs/index.html",
+    "doc:html": "typedoc src/ --target ES6 --mode file --out docs && cp -r assets docs",
+    "doc:json": "typedoc src/ --target ES6 --mode file --json docs/typedoc.json && cp -r assets docs",
+    "doc:build-storybook": "build-storybook -c ./bluebase/storybook/configs -o docs/storybook",
+    "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d docs",
+    "version": "standard-version",
+    "reset": "git clean -dfx && git reset --hard && npm i",
+    "all": "run-s reset test cov:check doc:html",
+    "prepare-release": "run-s all version doc:publish",
+    "size": "size-limit",
+    "storybook:start": "bluebase storybook:start",
+    "storybook-native": "bluebase storybook-native:start",
+    "storybook": "start-storybook -p 6006 --config-dir ./bluebase/storybook/configs",
+    "screenshot": "storybook-chrome-screenshot -p 9001 -c ./bluebase/storybook/configs",
+    "build-storybook": "build-storybook",
+    "web:start": "bluebase web:start",
+    "expo:start": "bluebase expo:start"
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    },
-    "validate-commit-msg": {
-      "types": "conventional-commit-types",
-      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
-    },
-    "react-native-storybook-loader": {
-      "searchDir": [
-        "./src"
-      ],
-      "pattern": "**/*.stories.tsx",
-      "outputFile": "./storybook/storyLoader.tsx"
-    }
+  "scripts-info": {
+    "info": "Display information about the package scripts",
+    "build": "Clean and rebuild the project",
+    "fix": "Try to automatically fix any linting problems",
+    "test": "Lint and unit test the project",
+    "watch": "Watch and rebuild the project on save",
+    "cov": "Rebuild, run tests, then create and open the coverage report",
+    "doc": "Generate HTML API documentation and open it in a browser",
+    "doc:json": "Generate API documentation in typedoc JSON format",
+    "version": "Bump package.json version, update CHANGELOG.md, tag release",
+    "reset": "Delete all untracked files and reset the repo to the last commit",
+    "prepare-release": "One-step: clean, build, test, publish docs, and prep a release"
   },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
-    },
-    "collectCoverage": true,
-    "mapCoverage": true
-  },
-  "devDependencies": {
-    "@bluebase/cli-essentials": "^0.0.2",
-    "@bluebase/core": "^4.0.0-aplha.10",
-    "@babel/core": "^7.3.4",
-    "@babel/runtime": "^7.3.4",
-    "@bluebase/storybook-addon": "^3.0.0",
-    "@blueeast/bluerain-platform-reactxp": "^3.0.3",
-    "@blueeast/tslint-config-blueeast": "^0.7.0",
-    "@storybook/addon-actions": "^3.3.12",
-    "@storybook/addon-graphql": "^3.2.0",
-    "@storybook/addon-info": "^3.2.9",
-    "@storybook/addon-knobs": "^3.3.13",
-    "@storybook/addon-links": "^3.3.12",
-    "@storybook/addon-storyshots": "^3.2.13",
-    "@storybook/addons": "^3.2.13",
-    "@storybook/react": "^3.3.12",
-    "@storybook/react-native": "^3.3.12",
-    "@types/compression": "^0.0.36",
-    "@types/deepmerge": "^2.2.0",
-    "@types/jest": "^21.1.0",
-    "@types/react": "^16.8.7",
-    "@types/react-native": "^0.51.9",
-    "@types/source-map-support": "^0.5.0",
-    "@types/storybook__react": "^3.0.6",
-    "@types/uuid": "^3.4.4",
-    "@types/node":"^11.11.0",
-    "awesome-typescript-loader": "^3.4.1",
-    "babel-loader": "^8.0.4",
-    "babel-preset-bluebase": "^2.3.0",
-    "bundlesize": "^0.15.2",
-    "codecov": "^2.3.1",
-    "colors": "^1.1.2",
-    "commitizen": "^2.9.6",
-    "coveralls": "^3.0.0",
-    "cross-env": "^5.0.1",
-    "cz-conventional-changelog": "^2.0.0",
-    "husky": "^0.14.0",
-    "jest": "^22.4.2",
-    "lint-staged": "^6.0.0",
-    "lodash.camelcase": "^4.3.0",
-    "prettier": "^1.4.4",
-    "prompt": "^1.0.0",
-    "prop-types": "^15.6.0",
-    "react-native-scripts": "1.8.1",
-    "react-native-storybook-loader": "^1.7.0",
-    "react-native-typescript-transformer": "^1.2.3",
-    "replace-in-file": "^3.0.0-beta.2",
-    "rimraf": "^2.6.1",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "semantic-release": "^15.13.3",
-    "storybook-addon-intl": "^2.1.2",
-    "storybook-addon-rtl": "^0.1.1",
-    "metro-react-native-babel-preset": "^0.53.0",
-    "ts-jest": "^22.4.1",
-    "ts-node": "^5.0.1",
-    "tslint": "^5.9.1",
-    "typedoc": "^0.11.1",
-    "source-map-support": "^0.5.10",
-    "uuid": "^3.3.2",
-    "typescript": "^3",
-    "validate-commit-msg": "^2.12.2"
+  "engines": {
+    "node": ">=8.9"
   },
   "dependencies": {
+    "react-native": "^0.57.8",
+    "tslib": "^1.9.3",
     "compression": "^1.7.3",
     "deepmerge": "^3.2.0",
-    "expo": "29.0.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "reactotron-apisauce": "^1.13.0",
     "reactotron-react-js": "^3.0.1"
   },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@bluebase/cli-essentials": "^0.0.4",
+    "@bluebase/code-standards": "^1.0.2",
+    "@bluebase/core": "^4.0.0-aplha.10",
+    "@bluebase/storybook-addon": "^3.0.0",
+    "@blueeast/tslint-config-blueeast": "^0.7.0",
+    "@types/deepmerge": "^2.2.0",
+    "@types/enzyme": "^3.9.0",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/enzyme-async-helpers": "^0.9.1",
+    "@types/jest": "^24.0.9",
+    "@types/react": "^16.8.7",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-loadable": "^5.5.0",
+    "@types/react-native": "^0.57.7",
+    "@types/react-test-renderer": "^16.8.1",
+    "@types/storybook__addon-info": "^4.1.0",
+    "@types/storybook__addon-knobs": "^4.0.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.3.1",
+    "babel-loader": "^8.0.5",
+    "babel-preset-expo": "^5.0.0",
+    "codacy-coverage": "^3.4.0",
+    "codecov": "^3.2.0",
+    "commitizen": "^3.0.7",
+    "cz-conventional-changelog": "^2.1.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
+    "enzyme-async-helpers": "^0.9.1",
+    "gh-pages": "^2.0.1",
+    "jest": "^24.3.1",
+    "jest-enzyme": "^7.0.2",
+    "jsdom": "^13.2.0",
+    "npm-run-all": "^4.1.3",
+    "opn-cli": "^4.0.0",
+    "prettier": "^1.16.4",
+    "react": "^16",
+    "react-dom": "^16.8.4",
+    "react-native-typescript-transformer": "^1.2.12",
+    "react-test-renderer": "^16.8.4",
+    "schedule": "^0.5.0",
+    "size-limit": "^0.21.1",
+    "standard-version": "^5.0.1",
+    "trash-cli": "^1.4.0",
+    "ts-jest": "^24.0.0",
+    "tslint": "^5.13.1",
+    "typedoc": "^0.14.2",
+    "typescript": "3.3.3333"
+  },
   "peerDependencies": {
-    "@bluebase/core": "*",
-    "react": "16.x.x",
-    "react-dom": "16.x.x"
+    "@bluebase/core": "^4.*",
+    "react": "^16.*"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "useTabs": true,
+    "trailingComma": "es5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

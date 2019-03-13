@@ -44,7 +44,7 @@ export const ReactotronDebugger = createPlugin({
 		'bluebase.logger.log': (
 			message: string,
 			{ params }: { params: any },
-			BB: BlueBase
+			_BB: BlueBase
 		) => {
 			Reactotron.log(message, params);
 		}
