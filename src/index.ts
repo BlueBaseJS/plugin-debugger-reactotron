@@ -5,9 +5,11 @@ const { trackGlobalErrors } = require('reactotron-react-js');
 import { BlueBase, BootOptions, createPlugin } from '@bluebase/core';
 
 export const ReactotronDebugger = createPlugin({
+
 	categories: ['debugger'],
-	key: 'reactotron',
-	name: 'reactotron',
+	key: '@bluebase/plugin-reactotron',
+	name: 'Reactotron',
+	version: '1.0.0',
 
 	defaultConfigs: {
 		'plugins.reactotron.apisauce': false,
@@ -30,12 +32,14 @@ export const ReactotronDebugger = createPlugin({
 					)
 				)
 				.connect(BB.Configs.getValue('plugins.reactotron.connect'));
+			BB.Logger.log('abc');
 		},
 		'bluebase.plugins.initialize': (
 			_bootOptions: BootOptions,
 			_ctx: any,
 			BB: BlueBase
 		) => {
+			console.log('Initialize');
 			Reactotron.configure(BB.Configs.getValue('plugins.reactotron.configure'))
 				.use(apisaucePlugin(BB.Configs.getValue('plugins.reactotron.apisauce')))
 				.connect(BB.Configs.getValue('plugins.reactotron.connect'))
