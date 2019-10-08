@@ -3,14 +3,14 @@ cache:
   yarn: true
   directories:
     - node_modules
-notifications:
-  email: false
+    - ~/.npm
+    - .jest
 node_js:
-  - lts/*
+  - 12
 script:
-  - yarn add @blueeast/bluerain-os
-  - yarn lint && yarn test --maxWorkers=2 && yarn build
+  - yarn run test
+  - yarn run build
 after_success:
-  - yarn report-coverage
-  - test $TRAVIS_BRANCH = "master" && yarn deploy-docs
-  - yarn semantic-release
+  - yarn run report-coverage
+  - test $TRAVIS_BRANCH = "master" && yarn run doc
+  - npx semantic-release@beta
